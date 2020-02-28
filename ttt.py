@@ -1,9 +1,18 @@
 import board
 import player
+import sys
 
-myBoard = board.Board(10)
-p1 = player.Player('E', 'human')
-p2 = player.Player('S', 'human')
+if len(sys.argv) == 1:
+    print("Using default random vs random")
+    p1_AI = 'random'
+    p2_AI = 'random'
+else:
+    p1_AI = sys.argv[1]
+    p2_AI = sys.argv[2]
+
+myBoard = board.Board(3)
+p1 = player.Player('X', p1_AI)
+p2 = player.Player('O', p2_AI)
 myBoard.display()
 while not myBoard.draw_check():
     #PLAYER 1 MOVE
