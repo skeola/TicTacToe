@@ -25,6 +25,7 @@ class Board:
                 print(j, sep='', end='')
             print('|')
         print('¯'*(self.dim+2))
+        print(np.array2string(self.board, separator='', prefix='', suffix=''))
 
     #Checks if a move is valid, returns True if the move is successful
     def place(self, x, y, piece):
@@ -125,3 +126,16 @@ class Board:
 
         return (False, ' ')
         
+    #Inverts the state of the board based on input
+    #pieces. Dependent on correctly passing the
+    #two piece chars as p1 and p2.
+    #Not sure if this is necessary for Q-learning
+    #from both sides of the board
+    def invert(self, p1, p2):
+        for i in self.board:
+            for j in range(0, self.dim):
+                if i[j] == p1:
+                    i[j] = p2
+                else:
+                    if i[j] == p2:
+                        i[j] = p1

@@ -1,7 +1,13 @@
 import board
 import player
+import rlplayer
 import sys
 
+#Change this to modify board size
+board_size = 3
+
+#Use args to let user select what type of controls
+#they want for the players
 if len(sys.argv) == 1:
     print("Using default random vs random")
     p1_AI = 'random'
@@ -10,10 +16,19 @@ else:
     p1_AI = sys.argv[1]
     p2_AI = sys.argv[2]
 
-myBoard = board.Board(3)
-p1 = player.Player('X', p1_AI)
-p2 = player.Player('O', p2_AI)
-myBoard.display()
+#Initialize board and players
+myBoard = board.Board(board_size)
+#Reinforcement learners handled in a separate class
+if p1_AI == 'RL':
+    p1 = rlplayer.RLPlayer('X', board_size)
+else:
+    p1 = player.Player('X', p1_AI)
+if p2_AI == 'RL':
+    p2 = rlplayer.RLPlayer('X', board_size)
+else:
+    p2 = player.Player('O', p2_AI)
+
+#Game loop
 while not myBoard.draw_check():
     #PLAYER 1 MOVE
     p1.move(myBoard)

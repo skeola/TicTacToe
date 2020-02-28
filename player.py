@@ -31,21 +31,9 @@ def select_ai(select, piece):
     #Default AI is random
     return random
 
-
-
 class Player:
-    #Use this for a fresh Q matrix
-    #q_matrix = np.zeros((1,2))
-
-    #Use this to train across runs
-    q_matrix = np.load('qmatrix.npy')
-
     #Creates a tic tac toe player with 'select' as 
     #its AI for how it selects moves
     def __init__(self, piece, select):
         self.piece = piece
         self.move = select_ai(select, piece)
-    
-    #Needed to save our q_matrix across runs
-    def __del__(self):
-        np.save('qmatrix.npy', self.q_matrix)
