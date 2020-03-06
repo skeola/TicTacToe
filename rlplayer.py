@@ -20,19 +20,18 @@ class RLPlayer:
         self.delta = delta
 
     #Allows us to change epsilon for subsequent runs
-    def set_epsilon(self, eps):
-        self.epsilon = eps
+    def reduce_epsilon(self):
+        if self.epsilon > 0:
+            self.epsilon -= self.delta
 
     #Reset the prev_move for a new game and reduce epsilon
     def game_reset(self):
         self.prev_move = None
-        if self.epsilon > 0:
-            self.epsilon -= self.delta
 
     #This function will take the board and make a move using 
     #epsilon greedy action selection. Then it will save the previous
     #state for use when updating the q-table
-    def move(self, s):
+    def move(self, s, greed=False):
         #If this state is new, add it with an array of 0s 
         #as the value
         state_string = s.to_string()
@@ -40,7 +39,7 @@ class RLPlayer:
             self.q_values[state_string] = np.zeros(s.dim*s.dim)
 
         #Greedy move
-        if np.random.random() > self.epsilon:
+        if greed or np.random.random() > self.epsilon:
             #Choose an action using epsilon-greedy action selection
             #Find the indecies with a max_q value
             curr_q = self.q_values[state_string]
