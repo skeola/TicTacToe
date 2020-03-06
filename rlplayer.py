@@ -86,5 +86,4 @@ class RLPlayer:
 
         #Check for a previous move so we can update Q
         if self.prev_move:
-            print(self.learn_rate*(reward+self.discount*np.amax(self.q_values[state_string])-self.q_values[self.prev_move[0]]))
             self.q_values[self.prev_move[0]] += self.learn_rate*(reward+self.discount*np.amax(self.q_values[state_string])-self.q_values[self.prev_move[0]])
