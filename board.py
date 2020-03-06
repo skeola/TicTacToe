@@ -25,8 +25,7 @@ class Board:
                 print(j, sep='', end='')
             print('|')
         print('¯'*(self.dim+2))
-        print(np.array2string(self.board, separator='', prefix='', suffix=''))
-
+        
     #Checks if a move is valid, returns True if the move is successful
     def place(self, x, y, piece):
         if self.board[x][y] != ' ':
@@ -57,6 +56,7 @@ class Board:
             return (win, piece)
         return (False, ' ')
 
+    #Checks for win by row
     def check_hori(self):
         piece = ' '
         win = False
@@ -75,6 +75,7 @@ class Board:
                 return (win, piece)
         return (False, ' ')
 
+    #Checks for win by column
     def check_vert(self):
         piece = ' '
         win = False
@@ -93,6 +94,7 @@ class Board:
                 return (win, piece)
         return (False, ' ')
 
+    #Checks the board diagonals for a win
     def check_diag(self):
         win = True
 
@@ -139,3 +141,29 @@ class Board:
                 else:
                     if i[j] == p2:
                         i[j] = p1
+
+    #Returns a 1x(n*n) array where valid moves are 1
+    #and invalid moves are 0
+    def get_valid_moves(self):
+        num_elem = self.dim*self.dim
+        ret = np.zeros(num_elem)
+        for i in range(0, num_elem):
+            if self.board[i//self.dim][i%self.dim] == ' ':
+                ret[i] = 1
+        return ret
+
+    #Returns the board state as a string
+    #Given a piece value, we will convert it to a
+    #universal format where X is our player and O is
+    #the opponent
+    def to_string(self, piece='X'):
+        ret = ""
+        for i in range(0, self.dim):
+            for j in range(0, self.dim):
+                if self.board[i][j] == piece:
+                    ret += piece
+                elif self.board[i][j] == ' ':
+                    ret += ' '
+                else:
+                    ret += 'O'
+        return ret

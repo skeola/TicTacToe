@@ -26,8 +26,6 @@ def select_ai(select, piece):
                 else:
                     print("Invalid move, try again!")
         return user_input
-    if select == 'RL':
-        return None
     #Default AI is random
     return random
 
