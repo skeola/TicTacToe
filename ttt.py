@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 #Change this to modify board size
 board_size = 3
-iterations = 10
+iterations = 100
 
 #Use args to let user select what type of controls
 #they want for the players
@@ -25,7 +25,7 @@ else:
 
 #Initialize players
 p1 = rlplayer.RLPlayer('X', board_size, eps, lr, disc, delta)
-p2 = player.Player('O', p2_AI)
+p2 = player.Player('O', 'random')
 
 match_record = None
 
@@ -84,5 +84,6 @@ for i in range(0, iterations):
 plt.plot(match_record[:,0], match_record[:,1])
 plt.ylabel('Total Score')
 plt.xlabel('Epoch')
-plt.title('')
+plt.title('ε={}, Δ={}, γ={}, η={}'.format(eps, delta, disc, lr))
+plt.savefig('ε={}, Δ={}, γ={}, η={}.png'.format(eps, delta, disc, lr))
 plt.show()
