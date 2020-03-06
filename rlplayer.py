@@ -3,7 +3,7 @@ import numpy as np
 import random
 
 class RLPlayer:
-    def __init__(self, piece, size):
+    def __init__(self, piece, size, eps, lr, disc, delta):
         #Create an empty dictionary to hold our q-values
         #key = board state as a string
         #value = q-values for each action
@@ -13,19 +13,25 @@ class RLPlayer:
         self.prev_move = None
         self.piece = piece
         #epsilon-greedy parameter
-        self.epsilon = 0.1
+        self.epsilon = eps
         #learning parameters
-        self.learn_rate = 0.1
-        self.discount = 0.9
+        self.learn_rate = lr
+        self.discount = disc
+        self.delta = delta
 
     #Allows us to change epsilon for subsequent runs
     def set_epsilon(self, eps):
         self.epsilon = eps
 
+    #Reset the prev_move for a new game and reduce epsilon
+    def game_reset(self):
+        self.prev_move = None
+        if self.epsilon > 0:
+            self.epsilon -= self.delta
+
     #This function will take the board and make a move using 
-    #epsilon greedy action selection. Then it will save the move
-    #made to prev_move so we can use it to update Q when we get
-    #back to our turn after the opponent moves
+    #epsilon greedy action selection. Then it will save the previous
+    #state for use when updating the q-table
     def move(self, s):
         #If this state is new, add it with an array of 0s 
         #as the value
@@ -66,6 +72,10 @@ class RLPlayer:
 
     
     def update_q(self, s):
+        #If this is the first move, no update
+        if self.prev_move == None:
+            return
+
         #Observe current state
         #Add this state to our q matrix if unseen
         state_string = s.to_string()
@@ -84,6 +94,7 @@ class RLPlayer:
         else:
             reward = 0
 
-        #Check for a previous move so we can update Q
-        if self.prev_move:
-            self.q_values[self.prev_move[0]] += self.learn_rate*(reward+self.discount*np.amax(self.q_values[state_string])-self.q_values[self.prev_move[0]])
+        #Update Q
+        prev_state_string = self.prev_move[0]
+        prev_move_num = self.prev_move[1]
+        self.q_values[prev_state_string][prev_move_num] += self.learn_rate*(reward+self.discount*np.amax(self.q_values[state_string])-self.q_values[prev_state_string][prev_move_num])
